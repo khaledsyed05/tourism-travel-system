@@ -9,14 +9,21 @@ use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
-    public function assignRole(Request $request, User $user)
+    public function assignRole(Request $request)
     {
         $request->validate([
-            'role' => 'required|exists:roles,name',
+            'user_id' => 'required|exists:users,id',
+            'role' => 'required|string|in:admin,travel_agent,customer',
         ]);
 
-        $role = Role::where('name', $request->role)->firstOrFail();
-        $user->syncRoles($role);
+        $user = User::findOrFail($request->user_id);
+        $role = Role::where('name', $request->role)->where('guard_name', 'api')->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+
+        $user->syncRoles([$role->name]);
 
         return response()->json(['message' => 'Role assigned successfully']);
     }
