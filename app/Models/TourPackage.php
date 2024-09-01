@@ -11,19 +11,22 @@ class TourPackage extends Model
     use HasFactory, Toggleable;
     protected $fillable = [
         'name', 'description', 'duration_days', 'start_date', 'end_date',
-        'max_participants', 'published', 'destination_id', 'itinerary', 'pricing_tiers'
+        'max_participants', 'published', 'destination_id', 'itinerary'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'is_active' => 'boolean',
+        'published' => 'boolean',
         'itinerary' => 'array',
-        'pricing_tiers' => 'array',
     ];
 
     public function destination()
     {
         return $this->belongsTo(Destination::class);
+    }
+    public function pricingTiers()
+    {
+        return $this->hasMany(PricingTier::class);
     }
 }

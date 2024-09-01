@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\Dashboard\BookingController;
 use App\Http\Controllers\API\Dashboard\DestinationController;
 use App\Http\Controllers\API\Dashboard\TourPackageController;
+use App\Http\Controllers\API\PricingTierController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,5 +31,14 @@ Route::middleware(['auth:api', 'role:travel_agent|admin'])->group(function () {
         Route::put('/{tourPackage}', [TourPackageController::class, 'update']);
         Route::delete('/{tourPackage}', [TourPackageController::class, 'destroy']);
         Route::patch('/{tourPackage}/toggle-published', [TourPackageController::class, 'togglePublished']);
+
+        Route::get('/{tourPackage}/pricing-tiers', [PricingTierController::class, 'index']);
+        Route::post('/{tourPackage}/pricing-tiers', [PricingTierController::class, 'store']);
+        Route::get('/{tourPackage}/pricing-tiers/{pricingTier}', [PricingTierController::class, 'show']);
+        Route::put('/{tourPackage}/pricing-tiers/{pricingTier}', [PricingTierController::class, 'update']);
+        Route::delete('/{tourPackage}/pricing-tiers/{pricingTier}', [PricingTierController::class, 'destroy']);
+
+        Route::apiResource('/{tourPackage}/bookings', BookingController::class);
+        Route::patch('bookings/{booking}/cancel', [BookingController::class, 'cancel']);
     });
 });

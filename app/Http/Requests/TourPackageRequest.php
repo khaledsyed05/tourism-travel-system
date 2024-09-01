@@ -31,13 +31,8 @@ class TourPackageRequest extends FormRequest
             'is_active' => 'boolean',
             'destination_id' => 'required|exists:destinations,id',
             'itinerary' => 'required|array',
-            'itinerary.*.day_number' => 'required|integer|min:1',
-            'itinerary.*.title' => 'required|string|max:255',
+            'itinerary.*.day' => 'required|integer|min:1',
             'itinerary.*.description' => 'required|string',
-            'pricing_tiers' => 'required|array',
-            'pricing_tiers.*.name' => 'required|string|max:255',
-            'pricing_tiers.*.price' => 'required|numeric|min:0',
-            'pricing_tiers.*.description' => 'nullable|string',
         ];
     }
 }

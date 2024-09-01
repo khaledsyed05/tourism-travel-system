@@ -19,8 +19,8 @@ class Destination extends Model
         'published',
     ];
 
-    //     public function packages()
-    //     {
-    //         return $this->hasMany(Package::class);
-    //     }
+    public function tourpackages()
+    {
+        return $this->hasMany(TourPackage::class);
+    }
 }

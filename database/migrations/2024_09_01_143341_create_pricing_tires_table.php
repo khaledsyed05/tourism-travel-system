@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tour_packages', function (Blueprint $table) {
+        Schema::create('pricing_tiers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tour_package_id')->constrained('tour_packages')->onDelete('cascade');
             $table->string('name');
+            $table->decimal('price', 10, 2);
             $table->text('description');
-            $table->integer('duration_days');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->integer('max_participants')->nullable();
-            $table->foreignId('destination_id')->constrained()->onDelete('cascade');
-            $table->json('itinerary');
-            $table->boolean('published')->default(true);
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tour_packages');
+        Schema::dropIfExists('pricing_tires');
     }
 };
