@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\TogglableController;
 use App\Http\Requests\DestinationRequest;
 use App\Models\Destination;
+use App\Models\TourPackage;
+use App\Traits\Toggleable;
 
-class DestinationController extends Controller
+class DestinationController extends TogglableController
 {
     /**
      * Display a listing of the resource.
@@ -68,7 +70,6 @@ class DestinationController extends Controller
     }
     public function togglePublished(Destination $destination)
     {
-        $destination->toggle('published');
-        return response()->json($destination);
+        return $this->toggle($destination, 'published');
     }
 }

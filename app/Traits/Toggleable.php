@@ -4,11 +4,10 @@ namespace App\Traits;
 
 trait Toggleable
 {
-    public function toggle($field)
+    public function toggle(string $field)
     {
         $this->$field = !$this->$field;
-        $this->save();
-        return $this;
+        return $this->save();
     }
 
     public function scopeWhereOn($query, $field)

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\Dashboard\DestinationController;
+use App\Http\Controllers\API\Dashboard\TourPackageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -10,14 +11,23 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/roles', [AdminController::class, 'listRoles']);
 });
 
-Route::get('/destinations', [DestinationController::class, 'index']);
-Route::middleware(['auth:api'])->group(function () {
-    Route::get('/destinations/{destination}', [DestinationController::class, 'show']);
-});
-
 Route::middleware(['auth:api', 'role:travel_agent|admin'])->group(function () {
-    Route::post('/destinations', [DestinationController::class, 'store']);
-    Route::put('/destinations/{destination}', [DestinationController::class, 'update']);
-    Route::delete('/destinations/{destination}', [DestinationController::class, 'destroy']);
-    Route::patch('destinations/{destination}/toggle-published', [DestinationController::class, 'togglePublished']);
+    Route::prefix('destinations')->group(function () {
+        Route::get('/', [DestinationController::class, 'index']);
+        Route::get('/{destination}', [DestinationController::class, 'show']);
+        Route::post('/', [DestinationController::class, 'store']);
+        Route::put('/{destination}', [DestinationController::class, 'update']);
+        Route::delete('/{destination}', [DestinationController::class, 'destroy']);
+        Route::patch('/{destination}/toggle-published', [DestinationController::class, 'togglePublished']);
+    });
+    
+    Route::prefix('tour-packages')->group(function () {
+        Route::get('/', [TourPackageController::class, 'index']);
+        Route::get('/search', [TourPackageController::class, 'search']);
+        Route::get('/{tourPackage}', [TourPackageController::class, 'show']);
+        Route::post('/', [TourPackageController::class, 'store']);
+        Route::put('/{tourPackage}', [TourPackageController::class, 'update']);
+        Route::delete('/{tourPackage}', [TourPackageController::class, 'destroy']);
+        Route::patch('/{tourPackage}/toggle-published', [TourPackageController::class, 'togglePublished']);
+    });
 });
