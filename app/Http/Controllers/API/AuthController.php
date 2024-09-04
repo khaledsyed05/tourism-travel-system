@@ -25,6 +25,7 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole('customer'); // Assign the 'customer' role by default
+        
 
         $token = $user->createToken('auth_token')->accessToken;
 

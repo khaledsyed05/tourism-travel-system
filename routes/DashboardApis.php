@@ -15,7 +15,6 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
 
 Route::middleware(['auth:api', 'role:travel_agent|admin'])->group(function () {
     Route::prefix('destinations')->group(function () {
-        Route::get('/', [DestinationController::class, 'index']);
         Route::get('/{destination}', [DestinationController::class, 'show']);
         Route::post('/', [DestinationController::class, 'store']);
         Route::put('/{destination}', [DestinationController::class, 'update']);
@@ -25,12 +24,11 @@ Route::middleware(['auth:api', 'role:travel_agent|admin'])->group(function () {
     
     Route::prefix('tour-packages')->group(function () {
         Route::get('/', [TourPackageController::class, 'index']);
-        Route::get('/search', [TourPackageController::class, 'search']);
-        Route::get('/{tourPackage}', [TourPackageController::class, 'show']);
         Route::post('/', [TourPackageController::class, 'store']);
         Route::put('/{tourPackage}', [TourPackageController::class, 'update']);
         Route::delete('/{tourPackage}', [TourPackageController::class, 'destroy']);
         Route::patch('/{tourPackage}/toggle-published', [TourPackageController::class, 'togglePublished']);
+        Route::patch('/{tourPackage}/toggle-featured', [TourPackageController::class, 'toggleFeatured']);
 
         Route::get('/{tourPackage}/pricing-tiers', [PricingTierController::class, 'index']);
         Route::post('/{tourPackage}/pricing-tiers', [PricingTierController::class, 'store']);

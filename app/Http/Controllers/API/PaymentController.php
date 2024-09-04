@@ -63,13 +63,4 @@ class PaymentController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    public function createTestPaymentMethod()
-{
-    try {
-        $paymentMethodId = $this->paymentService->createTestPaymentMethod();
-        return response()->json(['payment_method_id' => $paymentMethodId]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-}
 }

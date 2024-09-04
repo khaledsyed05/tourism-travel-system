@@ -72,4 +72,37 @@ class DestinationController extends TogglableController
     {
         return $this->toggle($destination, 'published');
     }
+    public function tourPackagesBelongToDestination($destinationId)
+    {
+        $destination = $this->getDestinationWithTourPackages($destinationId);
+
+        $formattedDestination = [
+            'id' => $destination->id,
+            'name' => $destination->name,
+            'country' => $destination->country,
+            'city' => $destination->city,
+            'tour_packages_count' => $destination->tourPackages->count(),
+            'tour_packages' => $destination->tourPackages->map(function ($tourPackage) {
+                return [
+                    'id' => $tourPackage->id,
+                    'name' => $tourPackage->name,
+                    'duration_days' => $tourPackage->duration_days,
+                    'start_date' => $tourPackage->start_date,
+                    'end_date' => $tourPackage->end_date,
+                ];
+            }),
+        ];
+
+        return response()->json($formattedDestination);
+    }
+    public function getDestinationWithTourPackages($destinationId)
+    {
+        return Destination::where('published', true)
+            ->where('id', $destinationId)
+            ->with(['tourPackages' => function ($query) {
+                $query->where('published', true)
+                    ->select('id', 'name', 'duration_days', 'start_date', 'end_date', 'destination_id');
+            }])
+            ->firstOrFail(['id', 'name', 'country', 'city']);
+    }
 }

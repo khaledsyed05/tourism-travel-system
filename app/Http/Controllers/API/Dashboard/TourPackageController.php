@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\TogglableController;
 use App\Http\Requests\TourPackageRequest;
+use App\Models\Destination;
 use App\Models\TourPackage;
 use App\Services\TourPackageService;
 use Illuminate\Http\Request;
@@ -65,18 +66,28 @@ class TourPackageController extends TogglableController
 
     public function search(Request $request)
     {
-        $keyword = $request->input('query', ''); // Provide a default empty string
-        $minDuration = $request->input('min_duration');
-        $maxDuration = $request->input('max_duration');
-
-        $results = $this->tourPackageService->searchTourPackages($keyword, $minDuration, $maxDuration);
-
-        return response()->json($results);
+        $tourPackages = $this->tourPackageService->searchTourPackages($request);
+        return response()->json($tourPackages);
     }
 
     public function togglePublished(TourPackage $tourPackage)
     {
-        return $this->toggle($tourPackage, 'published');
-    }
+        $wasPublished = $tourPackage->published;
+        $result = $this->toggle($tourPackage, 'published');
     
+        // If the package was unpublished, also unfeature it
+        if ($wasPublished && !$tourPackage->published) {
+            $tourPackage->featured = false;
+            $tourPackage->save();
+        }
+        return $result;
+    }
+    public function toggleFeatured(TourPackage $tourPackage)
+    {
+        // Only allow featuring if the tour package is published
+        if (!$tourPackage->published) {
+            return response()->json(['message' => 'Cannot feature an unpublished tour package'], 400);
+        }
+        return $this->toggle($tourPackage, 'featured');
+    }
 }
