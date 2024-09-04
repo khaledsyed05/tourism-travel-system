@@ -29,4 +29,8 @@ class TourPackage extends Model
     {
         return $this->hasMany(PricingTier::class);
     }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }
