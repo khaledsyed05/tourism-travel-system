@@ -27,4 +27,8 @@ class Booking extends Model
     {
         return $this->belongsTo(TourPackage::class);
     }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }
